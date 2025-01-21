@@ -12,7 +12,11 @@ class Item extends Model
     protected $guarded = ['id'];
     protected $fillable = [
         'category_id',
-        'item_name'
+        'item_name',
+        'quantity',
+        'condition',
+        'brnad',
+        'type'
     ];
 
     public function category()

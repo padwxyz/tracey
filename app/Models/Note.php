@@ -11,14 +11,18 @@ class Note extends Model
 
     protected $guarded = ['id'];
     protected $fillable = [
+        'user_id',
+        'admin_id',
         'location_id',
         'category_id',
         'item_id',
-        'item_name',
-        'quantity',
-        'condition',
-        'brnad',
-        'type'
+        'title',
+        'date',
+        'time',
+        'problem',
+        'activity',
+        'status',
+        'image'
     ];
 
     public function location()
