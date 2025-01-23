@@ -23,7 +23,7 @@ class RegisterController extends Controller
             'password' => 'required| min:5| max:255',
             'password_confirmation' => 'required| same:password',
             'gender' => 'required| in:male,female',
-            'phone_number' => 'required| regex:/^([0-9\s\-\+\(\)]*)$/| min:10 '
+            'phone_number' => 'required| regex:/^([0-9\s\-\+\(\)]*)$/| max:15'
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
