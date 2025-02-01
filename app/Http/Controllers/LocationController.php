@@ -11,7 +11,7 @@ class LocationController extends Controller
     {
         $location = Location::all();
         $title = 'Location Management Data';
-        return view('', compact('location', 'title'));
+        return view('pages.admin.master_data.location_data', compact('location', 'title'));
     }
 
     public function store(Request $request)

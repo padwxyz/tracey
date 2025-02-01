@@ -12,7 +12,7 @@ class AdminController extends Controller
     {
         $admin = Admin::all();
         $title = 'Admin Management Data';
-        return view('', compact('Admin', 'title'));
+        return view('pages.admin.master_data.admin_data', compact('admin', 'title'));
     }
 
     public function store(Request $request)

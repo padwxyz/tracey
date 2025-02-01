@@ -13,7 +13,7 @@ class CategoryController extends Controller
         $category = Category::with('location')->get();
         $location = Location::all();
         $title = 'Category Management Data';
-        return view('', compact('category', 'location', 'title'));
+        return view('pages.admin.master_data.category_data', compact('category', 'location', 'title'));
     }
 
     public function store(Request $request)

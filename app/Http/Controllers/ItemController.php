@@ -13,7 +13,7 @@ class ItemController extends Controller
         $item = Item::with('category.location')->get();
         $category = Category::with('location')->get();
         $title = 'Item Management Data';
-        return view('', compact('item', 'category', 'title'));
+        return view('pages.admin.master_data.item_data', compact('item', 'category', 'title'));
     }
 
     public function store(Request $request)
