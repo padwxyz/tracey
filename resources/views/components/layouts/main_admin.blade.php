@@ -21,7 +21,7 @@
 </head>
 
 <body style="font-family: 'Outfit', serif;">
-    @include('components.partials.sidebar')
+    @include('components.partials.sidebar_admin')
     @yield('container')
 </body>
 
