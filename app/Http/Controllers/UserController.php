@@ -12,7 +12,7 @@ class UserController extends Controller
     {
         $users = User::all();
         $title = 'User Management Data';
-        return view('', compact('users', 'title'));
+        return view('pages.admin.master_data.user_data', compact('users', 'title'));
     }
 
     public function store(Request $request)
