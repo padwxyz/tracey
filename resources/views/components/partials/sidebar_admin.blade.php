@@ -60,7 +60,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href=""
+                        <a href="{{ route('user.index') }}"
                             class="flex items-center p-3 pl-10 text-gray-900 rounded-lg dark:text-[#213555] font-semibold hover:bg-[#213555] hover:text-white group">
                             User Data
                         </a>
