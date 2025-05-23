@@ -13,15 +13,24 @@
                     Tracey is your all-in-one platform to track employee activities, generate insightful reports,
                     and securely archive work data—empowering your team to stay productive and organized.
                 </p>
-                <button
-                    class="px-24 py-4 text-white text-lg font-semibold rounded-2xl bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] focus:outline-none focus:ring-4 focus:ring-[#0045A4]/50 transition-all duration-500 ease-in-out">
-                    Get Started
-                </button>
+                <a href="{{ url('login') }}">
+                    <button
+                        class="px-24 py-4 text-white text-lg font-semibold rounded-2xl bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] focus:outline-none focus:ring-4 focus:ring-[#0045A4]/50 transition-all duration-500 ease-in-out">
+                        Get Started
+                    </button>
+                </a>
             </div>
         </div>
     </section>
 
     <section id="About" class="container mx-auto mb-[50px] px-4 md:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3">Why Choose Tracey?</h2>
+            <p class="text-lg text-gray-600">
+                At Tracey, we are dedicated to helping teams simplify their workflows. Our platform makes it easy to record,
+                organize, and access work activities—so your team can stay productive and focused on what matters most.
+            </p>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
             <div class="bg-white rounded-2xl p-8 shadow-xl w-full max-w-sm">
                 <h2 class="text-[24px] md:text-[28px] font-bold text-gray-900 mb-3">
@@ -54,10 +63,12 @@
                         platform.
                     </p>
                 </div>
-                <button
-                    class="w-1/2 px-6 py-3 text-white text-base font-semibold rounded-lg bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] focus:outline-none focus:ring-4 focus:ring-[#0045A4]/50 transition-all duration-300 ease-in-out">
-                    Get Started
-                </button>
+                <a href="{{ url('login') }}">
+                    <button
+                        class="w-1/2 px-6 py-3 text-white text-base font-semibold rounded-lg bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] focus:outline-none focus:ring-4 focus:ring-[#0045A4]/50 transition-all duration-300 ease-in-out">
+                        Get Started
+                    </button>
+                </a>
                 <img src="/img/rocket.png" alt="Boost" class="rounded-lg shadow w-full object-contain" />
             </div>
         </div>
@@ -110,7 +121,7 @@
         </div>
     </section>
 
-    <section id="Service" class="mb-[100px]">
+    <section id="Service" class="mb-[110px]">
         <div class="container mx-auto px-4 md:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3">Our Service for You</h2>
@@ -219,7 +230,7 @@
         </div>
     </section>
 
-    <section id="FAQ" class="container mx-auto mb-[100px] px-4 md:px-8">
+    <section id="FAQ" class="container mx-auto mb-[110px] px-4 md:px-8">
         <div>
             <div class="text-center mb-16">
                 <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3">Frequently Asked Questions</h2>
