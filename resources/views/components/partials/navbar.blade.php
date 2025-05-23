@@ -1,6 +1,6 @@
 <nav class="fixed top-4 w-full z-50 flex justify-center">
     <div class="relative w-[90%] max-w-7xl">
-        <div class="relative bg-white rounded-full flex items-center justify-between px-12 py-5 shadow-lg">
+        <div class="relative bg-[#F8F8FC] rounded-full flex items-center justify-between px-12 py-5 shadow-lg">
             <div class="flex-shrink-0 w-[110px] h-[40px]">
                 <img class="h-10 w-auto" src="{{ asset('img/tracey-logo.png') }}" alt="Tracey">
             </div>
