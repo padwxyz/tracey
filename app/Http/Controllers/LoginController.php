@@ -9,9 +9,8 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view('', [
-            'title' => 'Login'
-        ]);
+        $title = 'Login';
+        return view('pages.auth.login', compact('title'));
     }
 
     public function authenticate(Request $request)

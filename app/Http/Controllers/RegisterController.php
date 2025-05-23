@@ -10,9 +10,8 @@ class RegisterController extends Controller
 {
     public function index()
     {
-        return view('', [
-            'title' => 'Register'
-        ]);
+        $title = 'Register';
+        return view('pages.auth.register', compact('title'));
     }
 
     public function store(Request $request)
@@ -22,13 +21,12 @@ class RegisterController extends Controller
             'email' => 'required| email:dns| unique:users',
             'password' => 'required| min:5| max:255',
             'password_confirmation' => 'required| same:password',
-            'gender' => 'required| in:male,female',
-            'phone_number' => 'required| regex:/^([0-9\s\-\+\(\)]*)$/| max:15'
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+
         User::create($validated);
 
-        return redirect('/')->with('success', 'Registered Successfully, Please Login');
+        return redirect()->route('login')->with('success', 'Registration successful! Please login!');
     }
 }

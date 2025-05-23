@@ -14,7 +14,7 @@ Route::post('/login-admin', [LoginController::class, 'authenticate']);
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard-admin', [DashboardAdminController::class, 'index'])->name('dashboard-admin');
+Route::get('/dashboarddadminn', [DashboardAdminController::class, 'index'])->name('dashboard-admin');
 
 Route::prefix('admin')->group(function () {
     Route::get('admin', [AdminController::class, 'index'])->name('admin.index');
