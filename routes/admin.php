@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\DashboardAdminController;
 
 Route::get('/login-admin', [LoginController::class, 'index'])->name('login-admin');
@@ -14,7 +15,7 @@ Route::post('/login-admin', [LoginController::class, 'authenticate']);
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/dashboarddadminn', [DashboardAdminController::class, 'index'])->name('dashboard-admin');
+Route::get('/dashboard-admin', [DashboardAdminController::class, 'index'])->name('dashboard-admin');
 
 Route::prefix('admin')->group(function () {
     Route::get('admin', [AdminController::class, 'index'])->name('admin.index');
@@ -49,4 +50,11 @@ Route::prefix('item')->group(function () {
     Route::post('item/store', [ItemController::class, 'store'])->name('item.store');
     Route::put('item/update/{id}', [ItemController::class, 'update'])->name('item.update');
     Route::delete('item/delete/{id}', [ItemController::class, 'delete'])->name('item.delete');
+});
+
+Route::prefix('note_data')->group(function () {
+    Route::get('note_data', [NoteController::class, 'indexNote'])->name('note_data.index');
+    Route::post('note_data/store', [NoteController::class, 'storeNote'])->name('note_data.store');
+    Route::put('note_data/update/{id}', [NoteController::class, 'updateNote'])->name('note_data.update');
+    Route::delete('note_data/delete/{id}', [NoteController::class, 'deleteNote'])->name('note_data.delete');
 });
