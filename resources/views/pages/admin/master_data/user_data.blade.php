@@ -1,11 +1,11 @@
 @extends('components.layouts.main_admin')
 
 @section('container')
-    <section class="px-5 md:pl-20 md:pr-20 my-10 md:ml-56 flex-grow mt-[100px]">
+    <section class="px-5 md:pl-20 md:pr-20 my-10 md:ml-56 flex-grow">
         <div class="md:flex md:justify-between md:items-center">
-            <h1 class="text-2xl font-bold">User Management Data</h1>
+            <h1 class="text-3xl font-bold">User Management Data</h1>
             <button
-                class="bg-blue-500 text-white px-4 py-2 my-3 md:my-5 rounded-md hover:bg-blue-600 transition duration-200"
+                class="bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] text-white px-4 py-2 my-3 md:my-5 rounded-md hover:bg-blue-600 transition duration-200"
                 onclick="toggleModal('addUserModal')">
                 <i class="fas fa-plus mr-2"></i>Add User Data
             </button>
@@ -89,7 +89,7 @@
                                     <div class="flex justify-end">
                                         <button type="submit"
                                             class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Save</button>
-                                        <button type="button" class="bg-gray-300 px-4 py-2 rounded"
+                                        <button type="button" class="bg-red-500 text-white px-4 py-2 rounded"
                                             onclick="toggleModal('editUserModal{{ $user->id }}')">Cancel</button>
                                     </div>
                                 </form>
@@ -138,7 +138,7 @@
                                 </div>
 
                                 <div class="flex justify-end">
-                                    <button type="button" class="bg-gray-300 px-4 py-2 rounded"
+                                    <button type="button" class="bg-red-500 text-white px-4 py-2 rounded"
                                         onclick="toggleModal('viewUserModal{{ $user->id }}')">Close</button>
                                 </div>
                             </div>
@@ -174,8 +174,8 @@
                         <input type="password" name="password" class="border rounded w-full px-3 py-2 mt-1" required>
                     </div>
                     <div class="flex justify-end">
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Add</button>
-                        <button type="button" class="bg-gray-300 px-4 py-2 rounded"
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Save</button>
+                        <button type="button" class="bg-red-500 text-white px-4 py-2 rounded"
                             onclick="toggleModal('addUserModal')">Cancel</button>
                     </div>
                 </form>
