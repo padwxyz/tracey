@@ -12,11 +12,9 @@ class Note extends Model
     protected $guarded = ['id'];
     protected $fillable = [
         'user_id',
-        'admin_id',
         'location_id',
         'category_id',
         'item_id',
-        'title',
         'date',
         'time',
         'problem',
@@ -43,10 +41,5 @@ class Note extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function admin()
-    {
-        return $this->belongsTo(Admin::class);
     }
 }
