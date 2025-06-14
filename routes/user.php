@@ -14,19 +14,11 @@ Route::get('/', function () {
     return view('pages.user.landing_page');
 });
 
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'authenticate']);
-
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-Route::get('/register', [RegisterController::class, 'index'])->name('register');
-Route::post('/register', [RegisterController::class, 'store']);
-
-Route::get('/dashboard', [DashboardUserController::class, 'index'])->name('dashboard');
+Route::get('/dashboard-user', [DashboardUserController::class, 'index'])->name('dashboard-user');
 
 Route::get('/note', [NoteController::class, 'index'])->name('note.index');
 Route::post('/note', [NoteController::class, 'store'])->name('note.store');
-Route::get('/facilities/{locationId}', [NoteController::class, 'getFacilities']);
+Route::get('/categories/{locationId}', [NoteController::class, 'getCategories']);
 Route::get('/items/{categoryId}', [NoteController::class, 'getItems']);
 
 Route::get('/all-activity', [NoteController::class, 'allActivity'])->name('all-activity');
@@ -46,3 +38,4 @@ Route::post('/note/{id}/add-comment', [NoteController::class, 'addComment'])->na
 Route::get('/history', [HistoryController::class, 'index'])->name('note.history');
 
 Route::get('/log-status', [LogController::class, 'index'])->name('log-status');
+

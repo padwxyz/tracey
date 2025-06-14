@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LocationController;
@@ -9,11 +8,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\DashboardAdminController;
-
-Route::get('/login-admin', [LoginController::class, 'index'])->name('login-admin');
-Route::post('/login-admin', [LoginController::class, 'authenticate']);
-
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard-admin', [DashboardAdminController::class, 'index'])->name('dashboard-admin');
 
