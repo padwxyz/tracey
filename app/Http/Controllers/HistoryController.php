@@ -10,7 +10,7 @@ class HistoryController extends Controller
     public function index()
     {
         $title = 'History';
-        $notes = Note::all();
+        $notes = Note::latest()->paginate(5);
         return view('pages.user.history', compact('title', 'notes'));
     }
 }
