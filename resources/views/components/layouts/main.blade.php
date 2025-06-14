@@ -24,6 +24,8 @@
 
 <body style="font-family: 'Plus Jakarta Sans', sans-serif;">
     @yield('container')
+
+    @stack('scripts')
 </body>
 
 </html>

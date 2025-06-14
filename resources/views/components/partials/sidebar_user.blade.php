@@ -3,15 +3,15 @@
     x-show="sidenav" @click.away="sidenav = false">
     <div class="space-y-6 md:space-y-5 mt-10 flex flex-col">
         <div class="flex items-center justify-center">
-            <a href=""><img src="{{ asset('img/tracey-logo.png') }}" class="h-12" alt=""></a>
-            {{-- {{ route('dashboard') }} --}}
+            <a href="{{ route('dashboard-user') }}"><img src="{{ asset('img/tracey-logo.png') }}" class="h-12"
+                    alt=""></a>
         </div>
         <h1 class="hidden md:block font-bold text-sm md:text-2xl text-center text-[#005051]">Tracey</h1>
 
         <div></div>
 
         <div id="menu" class="flex flex-col space-y-3 mt-10 flex-grow">
-            <a href="" {{-- {{ route('dashboard') }} --}}
+            <a href="{{ route('dashboard-user') }}"
                 class="text-sm font-medium py-2 px-3 hover:bg-[#005051] text-[#005051] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out">
                 <svg class="w-6 h-6 fill-current inline-block" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +21,7 @@
                 </svg>
                 <span class="">Dashboard</span>
             </a>
-            <a href="" {{-- {{ route('note.index') }} --}}
+            <a href="{{ route('note.index') }}"
                 class="text-sm font-medium py-2 px-3 hover:bg-[#005051] text-[#005051] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out">
                 <svg class="w-6 h-6 fill-current inline-block" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -32,7 +32,7 @@
                 </svg>
                 <span class="">Note</span>
             </a>
-            <a href="" {{-- {{ route('all-activity') }} --}}
+            <a href="{{ route('all-activity') }}"
                 class="text-sm font-medium py-2 px-3 hover:bg-[#005051] text-[#005051] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out">
                 <svg class="w-6 h-6 fill-current inline-block" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +42,7 @@
                 </svg>
                 <span class="">All Activity</span>
             </a>
-            <a href="" {{-- {{ '/history' }} --}}
+            <a href="{{ '/history' }}"
                 class="text-sm font-medium py-2 px-3 hover:bg-[#005051] text-[#005051] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out">
                 <svg class="w-6 h-6 fill-current inline-block" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -52,7 +52,7 @@
                 </svg>
                 <span class="">History</span>
             </a>
-            <a href="" {{-- {{ route('log-status') }} --}}
+            <a href="{{ route('log-status') }}"
                 class="text-sm font-medium py-2 px-3 hover:bg-[#005051] text-[#005051] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out">
                 <svg class="w-6 h-6 fill-current inline-block" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -65,8 +65,7 @@
         </div>
     </div>
     <div id="logout" class="mt-6">
-        <form action="" method="POST">
-            {{-- {{ route('logout') }} --}}
+        <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit"
                 class="text-sm font-medium py-2 px-3 hover:bg-red-600 hotext-[#005051] hover:text-white over:scale-105 rounded-md transition duration-150 ease-in-out">
