@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('pages.user.landing_page');
-});
+})->name('landing-page');
 
 Route::get('/dashboard-user', [DashboardUserController::class, 'index'])->name('dashboard-user');
 
