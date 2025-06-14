@@ -15,7 +15,7 @@ class DashboardUserController extends Controller
         $dones = Note::where('status', 'done')->count();
         $cancels = Note::where('status', 'cancel')->count();
         $recentActivities = Note::orderBy('created_at', 'desc')->take(5)->get();
-        $title = 'Dashboard';
+        $title = 'Dashboard User';
 
         return view('pages.user.dashboard_user', compact('todos', 'pendings', 'inProgress', 'dones', 'cancels', 'recentActivities', 'title'));
     }
