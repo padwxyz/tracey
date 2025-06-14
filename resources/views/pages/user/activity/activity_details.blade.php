@@ -32,7 +32,7 @@
                             {{ \Carbon\Carbon::parse($note->date)->format('d/m/Y') }}</p>
                         <p class="mt-2 text-gray-600"><span class="font-bold">Time:</span>
                             {{ \Carbon\Carbon::parse($note->time)->format('h:i A') }}</p>
-                        <p class="mt-2 text-gray-600"><span class="font-bold">Name:</span> {{ $note->name }}</p>
+                        <p class="mt-2 text-gray-600"><span class="font-bold">Name:</span> {{ $note->user->name }}</p>
                         </p>
                     </div>
                     <div class="flex-1 ml-10">
