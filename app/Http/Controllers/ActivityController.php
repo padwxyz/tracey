@@ -10,6 +10,13 @@ use App\Models\Location;
 
 class ActivityController extends Controller
 {
+    public function index()
+    {
+        $notes = $notes = Note::paginate(6);
+        $title = 'All Activity';
+        return view('pages.user.activity.activity', compact('notes', 'title'));
+    }
+
     public function viewByCategory()
     {
         $categories = Category::all();
@@ -44,17 +51,18 @@ class ActivityController extends Controller
         $filterType = $request->input('filter_type');
         $filterValue = $request->input('filter_value');
 
-        $notes = Note::with(['category', 'item', 'location']) // 'facility' removed
-            ->when($filterType == 'category', function ($query) use ($filterValue) {
-                return $query->where('category_id', $filterValue);
+        $notes = Note::with(['category', 'item', 'location'])
+            ->when($filterType === 'category', function ($query) use ($filterValue) {
+                $query->where('category_id', $filterValue);
             })
-            ->when($filterType == 'item', function ($query) use ($filterValue) {
-                return $query->where('item_id', $filterValue);
+            ->when($filterType === 'item', function ($query) use ($filterValue) {
+                $query->where('item_id', $filterValue);
             })
-            ->when($filterType == 'location', function ($query) use ($filterValue) {
-                return $query->where('location_id', $filterValue);
+            ->when($filterType === 'location', function ($query) use ($filterValue) {
+                $query->where('location_id', $filterValue);
             })
-            ->get() ?? collect();
+            ->paginate(5)
+            ->appends($request->query());
 
         $title = 'Filtered Activities';
 
@@ -70,6 +78,7 @@ class ActivityController extends Controller
 
         return view($view, array_merge(compact('notes', 'title'), $additionalData));
     }
+
 
     public function viewByStatus()
     {
