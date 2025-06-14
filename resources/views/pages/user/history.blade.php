@@ -1,16 +1,19 @@
-@extends('components.layouts.main2')
+@extends('components.layouts.main')
 
-@include('components.partials.sidebar')
+@include('components.partials.sidebar_user')
 
 @section('container')
     <section class="pl-24 pr-20 my-10 ml-56 flex-grow">
-        <h1 class="text-[42px] font-bold mb-10">Your Note History</h1>
+        <h1 class="text-[42px] font-bold mb-10">Your Note History📜</h1>
 
         @if ($notes && $notes->isNotEmpty())
             @foreach ($notes as $note)
                 <div class="mt-8 mb-5">
                     <a href="{{ route('activity-details', ['id' => $note->id]) }}">
-                        <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-md"">
+                        <div
+                            class="flex items-center justify-between bg-white p-4 rounded-2xl shadow-md
+                                           transition duration-300 ease-in-out
+                                           hover:-translate-y-2 hover:scale-105 hover:shadow-xl hover:bg-gray-50">
                             <div>
                                 <h3 class="text-2xl font-bold pb-2">{{ $note->problem }}</h3>
                                 <p class="text-lg">{{ $note->activity }}</p>
@@ -30,6 +33,11 @@
                     </a>
                 </div>
             @endforeach
+
+            <div class="mt-8">
+                {{ $notes->links('vendor.pagination.tailwind-white') }}
+            </div>
+            
         @else
             <p class="mt-5 text-xl">You don't have any notes yet.</p>
         @endif
