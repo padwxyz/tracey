@@ -12,13 +12,17 @@ class NoteController extends Controller
 {
     public function getCategories($locationId)
     {
-        $categories = Category::where('location_id', $locationId)->get();
+        $categories = Category::where('location_id', $locationId)
+            ->select('id', 'category_name')
+            ->get();
         return response()->json($categories);
     }
 
     public function getItems($categoryId)
     {
-        $items = Item::where('category_id', $categoryId)->get();
+        $items = Item::where('category_id', $categoryId)
+            ->select('id', 'item_name')
+            ->get();
         return response()->json($items);
     }
 
