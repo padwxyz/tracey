@@ -9,24 +9,33 @@ class LoginController extends Controller
 {
     public function index()
     {
-        $title = 'Login';
-        return view('pages.auth.login', compact('title'));
+        return view('pages.auth.login', ['title' => 'Login']);
     }
 
     public function authenticate(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email:dns',
-            'password' => 'required'
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('dashboard');
+            $user = Auth::user();
+
+            switch ($user->role) {
+                case 'admin':
+                    return redirect()->route('dashboard-admin');
+                case 'user':
+                    return redirect()->route('dashboard-user');
+                default:
+                    Auth::logout();
+                    return redirect()->route('login')->with('failed', 'Role tidak dikenali!');
+            }
         }
 
-        return back()->with('failed', 'Login failed!');
+        return back()->with('failed', 'Login gagal! Cek email atau password.');
     }
 
     public function logout(Request $request)
@@ -34,6 +43,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+
+        return redirect()->route('landing-page')->with('success', 'Logout berhasil.');
     }
 }
