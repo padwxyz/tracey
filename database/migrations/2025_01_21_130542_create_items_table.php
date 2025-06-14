@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained();
             $table->string('item_name');
             $table->integer('quantity');
-            $table->enum('condition', ['Normal', 'Not normal']);
+            $table->enum('condition', ['Normal', 'Not Normal']);
             $table->string('brand');
             $table->string('type');
             $table->timestamps();

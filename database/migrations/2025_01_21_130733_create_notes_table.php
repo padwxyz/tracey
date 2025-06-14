@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('admin_id')->constrained()->onDelete('cascade');
             $table->foreignId('location_id')->constrained();
             $table->foreignId('category_id')->constrained();
             $table->foreignId('item_id')->constrained();
-            $table->string('title');
             $table->date('date');
             $table->time('time');
             $table->string('problem');
