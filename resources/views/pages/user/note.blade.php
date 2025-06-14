@@ -1,6 +1,6 @@
-@extends('components.layouts.main2')
+@extends('components.layouts.main')
 
-@include('components.partials.sidebar')
+@include('components.partials.sidebar_user')
 
 @section('container')
     <section class="pl-24 pr-20 my-10 ml-56 flex-grow">
@@ -25,45 +25,21 @@
             <div class="grid grid-cols-2 gap-4">
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
-                    <input type="text" id="name" name="name" value="{{ $user->name ?? '' }}"
+                    <input type="text" id="name" name="name" value="{{ Auth::user()->name }}"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         readonly>
                 </div>
-
-                <div class="mb-4">
-                    <label for="pic" class="block text-gray-700 text-sm font-bold mb-2">PIC Name:</label>
-                    <select id="pic" name="pic"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white leading-tight focus:outline-none focus:shadow-outline"
-                        required>
-                        <option value="">Choose PIC Name</option>
-                        @foreach ($pics as $pic)
-                            <option value="{{ $pic->id }}" {{ old('pic') == $pic->id ? 'selected' : '' }}>
-                                {{ $pic->pic_name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
                 <div class="mb-4">
                     <label for="location" class="block text-gray-700 text-sm font-bold mb-2">Location:</label>
                     <select id="location" name="location"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        onchange="loadFacilities()" required>
+                        onchange="loadCategories()" required>
                         <option value="">Choose Location</option>
                         @foreach ($locations as $location)
                             <option value="{{ $location->id }}" {{ old('location') == $location->id ? 'selected' : '' }}>
                                 {{ $location->location_name }}
                             </option>
                         @endforeach
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label for="facility" class="block text-gray-700 text-sm font-bold mb-2">Facility:</label>
-                    <select id="facility" name="facility"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        onchange="loadCategories()" disabled>
-                        <option value="">Choose Facility</option>
                     </select>
                 </div>
 
@@ -84,6 +60,7 @@
                         <option value="">Choose Item</option>
                     </select>
                 </div>
+
                 <div class="mb-4">
                     <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Date:</label>
                     <input type="date" id="date" name="date" value="{{ old('date') }}"
@@ -97,48 +74,45 @@
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required>
                 </div>
-
-                <div class="mb-4">
-                    <label for="problem" class="block text-gray-700 text-sm font-bold mb-2">Problem:</label>
-                    <textarea id="problem" name="problem" rows="4"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required>{{ old('problem') }}</textarea>
-                </div>
-
-                <div class="mb-4">
-                    <label for="activity" class="block text-gray-700 text-sm font-bold mb-2">Activity:</label>
-                    <textarea id="activity" name="activity" rows="4"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required>{{ old('activity') }}</textarea>
-                </div>
-
-                <div class="mb-4">
-                    <label for="status" class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
-                    <select id="status" name="status"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required>
-                        <option value="todo" {{ old('status') == 'todo' ? 'selected' : '' }}>To Do</option>
-                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="inprogress" {{ old('status') == 'inprogress' ? 'selected' : '' }}>In Progress
-                        </option>
-                        <option value="done" {{ old('status') == 'done' ? 'selected' : '' }}>Done</option>
-                        <option value="cancel" {{ old('status') == 'cancel' ? 'selected' : '' }}>Cancel</option>
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image:</label>
-                    <input type="file" id="image" name="image"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-
-                <div class="mb-4">
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Save Note</button>
-                </div>
+            </div>
+            <div class="mb-4">
+                <label for="problem" class="block text-gray-700 text-sm font-bold mb-2">Problem:</label>
+                <textarea id="problem" name="problem" rows="4"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    required>{{ old('problem') }}</textarea>
+            </div>
+            <div class="mb-4">
+                <label for="activity" class="block text-gray-700 text-sm font-bold mb-2">Activity:</label>
+                <textarea id="activity" name="activity" rows="4"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    required>{{ old('activity') }}</textarea>
+            </div>
+            <div class="mb-4">
+                <label for="status" class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
+                <select id="status" name="status"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    required>
+                    <option value="todo" {{ old('status') == 'todo' ? 'selected' : '' }}>To Do</option>
+                    <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="inprogress" {{ old('status') == 'inprogress' ? 'selected' : '' }}>In Progress</option>
+                    <option value="done" {{ old('status') == 'done' ? 'selected' : '' }}>Done</option>
+                    <option value="cancel" {{ old('status') == 'cancel' ? 'selected' : '' }}>Cancel</option>
+                </select>
+            </div>
+            <div class="mb-10">
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image:</label>
+                <input type="file" id="image" name="image"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <button type="submit"
+                    class="bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] text-white py-2 px-4 rounded">Save
+                    Note</button>
             </div>
         </form>
     </section>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ asset('js/note.js') }}"></script>
+@endpush
