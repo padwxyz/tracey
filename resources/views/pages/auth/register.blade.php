@@ -84,6 +84,30 @@
                             @error('name')
                                 <span class="text-sm text-red-500 text-left block">{{ $message }}</span>
                             @enderror
+                            <label class="mb-2 text-sm sm:text-base text-start text-grey-900">Gender</label>
+                            <div class="flex gap-4 mb-3">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="gender" value="male"
+                                        {{ old('gender') == 'male' ? 'checked' : '' }} class="form-radio text-[#4ABA68]">
+                                    <span class="ml-2">Male</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="gender" value="female"
+                                        {{ old('gender') == 'female' ? 'checked' : '' }} class="form-radio text-[#4ABA68]">
+                                    <span class="ml-2">Female</span>
+                                </label>
+                            </div>
+                            @error('gender')
+                                <span class="text-sm text-red-500 text-left block mb-3">{{ $message }}</span>
+                            @enderror
+                            <label for="phone_number" class="mb-2 text-sm sm:text-base text-start text-grey-900">Phone
+                                Number</label>
+                            <input id="phone_number" name="phone_number" type="text" value="{{ old('phone_number') }}"
+                                placeholder="08123456789"
+                                class="flex items-center px-5 py-4 mb-3 text-sm sm:text-base font-medium outline-none focus:bg-white placeholder:text-grey-700 bg-slate-100 text-dark-grey-900 rounded-2xl border @error('phone_number') border-red-500 @else border-slate-300 @enderror">
+                            @error('phone_number')
+                                <span class="text-sm text-red-500 text-left block mb-3">{{ $message }}</span>
+                            @enderror
                             <label for="password"
                                 class="mb-2 text-sm sm:text-base text-start text-grey-900">Password</label>
                             <input id="password" name="password" type="password" placeholder="Enter your password"
@@ -99,10 +123,9 @@
                             @error('password_confirmation')
                                 <span class="text-sm text-red-500 text-left block">{{ $message }}</span>
                             @enderror
-
                             <div class="flex flex-row justify-between mb-5 mt-5">
                                 <label class="relative inline-flex items-center cursor-pointer select-none">
-                                    <input type="checkbox" name="terms" value="1" class="sr-only peer">
+                                    <input type="checkbox" name="terms" value="1" class="sr-only peer" required>
                                     <div
                                         class="w-5 h-5 bg-white border-2 rounded-sm border-grey-500 peer peer-checked:border-0 peer-checked:bg-[#66B82D]">
                                         <img src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/motion-tailwind/img/icons/check.png"

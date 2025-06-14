@@ -106,7 +106,8 @@
                                 Login
                             </button>
                             <p class="text-sm sm:text-base leading-relaxed text-grey-900">Not registered yet? <a
-                                    href="{{ route('register') }}" class="font-extrabold text-[#005051]">Create an Account</a></p>
+                                    href="{{ route('register') }}" class="font-extrabold text-[#005051]">Create an
+                                    Account</a></p>
                         </form>
                     </div>
                 </div>
