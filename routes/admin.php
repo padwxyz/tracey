@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CategoryController;
@@ -10,13 +9,6 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\DashboardAdminController;
 
 Route::get('/dashboard-admin', [DashboardAdminController::class, 'index'])->name('dashboard-admin');
-
-Route::prefix('admin')->group(function () {
-    Route::get('admin', [AdminController::class, 'index'])->name('admin.index');
-    Route::post('admin/store', [AdminController::class, 'store'])->name('admin.store');
-    Route::put('admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
-    Route::delete('admin/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
-});
 
 Route::prefix('user')->group(function () {
     Route::get('user', [UserController::class, 'index'])->name('user.index');
