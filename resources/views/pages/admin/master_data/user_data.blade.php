@@ -11,15 +11,40 @@
             </button>
         </div>
 
+        <form method="GET" action="{{ route('user.index') }}">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <label for="entries" class="mr-2 text-md">Show</label>
+                    <select name="entries" id="entries" onchange="this.form.submit()"
+                        class="border border-gray-300 rounded py-1 px-3 text-md bg-white text-gray-700">
+                        <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                        <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100</option>
+                    </select>
+                    <span class="ml-2 text-md">entries</span>
+                </div>
+                <div>
+                    <label for="search" class="mr-2 text-md">Search:</label>
+                    <input type="text" id="search" name="search" value="{{ request('search') }}"
+                        class="border border-gray-300 rounded py-1 px-3 text-md bg-white text-gray-700"
+                        placeholder="Search...">
+                    <button type="submit"
+                        class="ml-2 bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] text-white py-1 px-3 rounded text-md">Go</button>
+                </div>
+            </div>
+        </form>
+
         <div class="overflow-x-auto">
             <table class="w-full rounded-lg border-collapse border border-gray-300 text-sm text-left">
-                <thead class="bg-gray-200 text-md md:text-xl">
+                <thead class="bg-gray-200 text-md md:text-md">
                     <tr>
                         <th class="px-4 py-2 border">ID</th>
                         <th class="px-4 py-2 border">Name</th>
                         <th class="px-4 py-2 border">Email</th>
                         <th class="px-4 py-2 border">Gender</th>
                         <th class="px-4 py-2 border">Phone Number</th>
+                        <th class="px-4 py-2 border">Role</th>
                         <th class="px-4 py-2 border">Actions</th>
                     </tr>
                 </thead>
@@ -31,6 +56,7 @@
                             <td class="px-4 py-2 border">{{ $user->email }}</td>
                             <td class="px-4 py-2 border">{{ $user->gender }}</td>
                             <td class="px-4 py-2 border">{{ $user->phone_number }}</td>
+                            <td class="px-4 py-2 border">{{ $user->role }}</td>
                             <td class="px-4 py-2 border">
                                 <div class="flex space-x-2">
                                     <button class="bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600"
@@ -72,8 +98,12 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="gender" class="block text-gray-700">Gender</label>
-                                        <input type="text" name="gender" value="{{ $user->gender }}"
-                                            class="border rounded w-full px-3 py-2 mt-1">
+                                        <select name="gender" class="border rounded w-full px-3 py-2 mt-1">
+                                            <option value="male" {{ $user->gender == 'male' ? 'selected' : '' }}>Male
+                                            </option>
+                                            <option value="female" {{ $user->gender == 'female' ? 'selected' : '' }}>Female
+                                            </option>
+                                        </select>
                                     </div>
                                     <div class="mb-4">
                                         <label for="phone_number" class="block text-gray-700">Phone Number</label>
@@ -81,10 +111,20 @@
                                             class="border rounded w-full px-3 py-2 mt-1">
                                     </div>
                                     <div class="mb-4">
+                                        <label for="role" class="block text-gray-700">Role</label>
+                                        <select name="role" class="border rounded w-full px-3 py-2 mt-1" required>
+                                            <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin
+                                            </option>
+                                            <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
                                         <label for="password" class="block text-gray-700">Password (leave blank to keep
                                             current
                                             password)</label>
-                                        <input type="password" name="password" class="border rounded w-full px-3 py-2 mt-1">
+                                        <input type="password" name="password"
+                                            class="border rounded w-full px-3 py-2 mt-1">
                                     </div>
                                     <div class="flex justify-end">
                                         <button type="submit"
@@ -179,6 +219,16 @@
                             onclick="toggleModal('addUserModal')">Cancel</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center mt-6 text-md">
+            <div>
+                Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() ?? 0 }}
+                entries
+            </div>
+            <div>
+                {{ $users->appends(request()->all())->onEachSide(1)->links('vendor.pagination.tailwind-white') }}
             </div>
         </div>
     </section>

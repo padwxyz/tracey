@@ -11,9 +11,33 @@
             </button>
         </div>
 
+        <form method="GET" action="{{ route('category.index') }}">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <label for="entries" class="mr-2 text-md">Show</label>
+                    <select name="entries" id="entries" onchange="this.form.submit()"
+                        class="border border-gray-300 rounded py-1 px-3 text-md bg-white text-gray-700">
+                        <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                        <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100</option>
+                    </select>
+                    <span class="ml-2 text-md">entries</span>
+                </div>
+                <div>
+                    <label for="search" class="mr-2 text-md">Search:</label>
+                    <input type="text" id="search" name="search" value="{{ request('search') }}"
+                        class="border border-gray-300 rounded py-1 px-3 text-md bg-white text-gray-700"
+                        placeholder="Search...">
+                    <button type="submit"
+                        class="ml-2 bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] text-white py-1 px-3 rounded text-md">Go</button>
+                </div>
+            </div>
+        </form>
+
         <div class="overflow-x-auto">
             <table class="w-full rounded-lg border-collapse border border-gray-300 text-sm text-left">
-                <thead class="bg-gray-100 text-md md:text-xl">
+                <thead class="bg-gray-100 text-md md:text-md">
                     <tr>
                         <th class="px-4 py-2 border">Code</th>
                         <th class="px-4 py-2 border">Category Name</th>
@@ -22,7 +46,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($category as $category)
+                    @foreach ($categories as $category)
                         <tr>
                             <td class="px-4 py-2 border">{{ $category->id }}</td>
                             <td class="px-4 py-2 border">{{ $category->category_name }}</td>
@@ -61,16 +85,6 @@
                                         <input type="text" name="category_name" value="{{ $category->category_name }}"
                                             class="border rounded w-full px-3 py-2 mt-1">
                                     </div>
-                                    <div class="mb-4">
-                                        <label for="facility_id" class="block text-gray-700">Fasilitas</label>
-                                        <select name="facility_id" class="border rounded w-full px-3 py-2 mt-1">
-                                            {{-- @foreach ($facilities as $facility)
-                                                <option value="{{ $facility->id }}"
-                                                    @if ($facility->id == $category->facility_id) selected @endif>
-                                                    {{ $facility->facility_name }}</option>
-                                            @endforeach --}}
-                                        </select>
-                                    </div>
                                     <div class="flex justify-end">
                                         <button type="submit"
                                             class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Save</button>
@@ -90,15 +104,9 @@
                                     <p class="border rounded w-full px-3 py-2 mt-1">{{ $category->category_name }}</p>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="facility_name" class="block text-gray-700">Fasilitas</label>
-                                    <p class="border rounded w-full px-3 py-2 mt-1">
-                                        {{ $category->facility->facility_name }}
-                                    </p>
-                                </div>
-                                <div class="mb-4">
                                     <label for="location_name" class="block text-gray-700">Lokasi Fasilitas</label>
                                     <p class="border rounded w-full px-3 py-2 mt-1">
-                                        {{ $category->facility->location->location_name }}</p>
+                                        {{ $category->location->location_name }}</p>
                                 </div>
                                 <div class="mb-4">
                                     <label for="created_at" class="block text-gray-700">Created At</label>
@@ -142,20 +150,23 @@
                         <label for="category_name" class="block text-gray-700">Nama Kategori</label>
                         <input type="text" name="category_name" class="border rounded w-full px-3 py-2 mt-1" required>
                     </div>
-                    <div class="mb-4">
-                        <label for="facility_id" class="block text-gray-700">Fasilitas</label>
-                        <select name="facility_id" class="border rounded w-full px-3 py-2 mt-1" required>
-                            {{-- @foreach ($facilities as $facility)
-                                <option value="{{ $facility->id }}">{{ $facility->facility_name }}</option>
-                            @endforeach --}}
-                        </select>
-                    </div>
                     <div class="flex justify-end">
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Save</button>
                         <button type="button" class="bg-red-500 text-white px-4 py-2 rounded"
                             onclick="toggleModal('addCategoryModal')">Cancel</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center mt-6 text-md">
+            <div>
+                Showing {{ $categories->firstItem() ?? 0 }} to {{ $categories->lastItem() ?? 0 }} of
+                {{ $categories->total() ?? 0 }}
+                entries
+            </div>
+            <div>
+                {{ $categories->appends(request()->all())->onEachSide(1)->links('vendor.pagination.tailwind-white') }}
             </div>
         </div>
     </section>

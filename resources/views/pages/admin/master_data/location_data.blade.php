@@ -11,9 +11,33 @@
             </button>
         </div>
 
+        <form method="GET" action="{{ route('location.index') }}">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <label for="entries" class="mr-2 text-md">Show</label>
+                    <select name="entries" id="entries" onchange="this.form.submit()"
+                        class="border border-gray-300 rounded py-1 px-3 text-md bg-white text-gray-700">
+                        <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                        <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100</option>
+                    </select>
+                    <span class="ml-2 text-md">entries</span>
+                </div>
+                <div>
+                    <label for="search" class="mr-2 text-md">Search:</label>
+                    <input type="text" id="search" name="search" value="{{ request('search') }}"
+                        class="border border-gray-300 rounded py-1 px-3 text-md bg-white text-gray-700"
+                        placeholder="Search...">
+                    <button type="submit"
+                        class="ml-2 bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] text-white py-1 px-3 rounded text-md">Go</button>
+                </div>
+            </div>
+        </form>
+
         <div class="overflow-x-auto">
             <table class="w-full rounded-lg border-collapse border border-gray-300 text-sm text-left">
-                <thead class="bg-gray-200 text-md md:text-xl">
+                <thead class="bg-gray-200 text-md md:text-md">
                     <tr>
                         <th class="px-4 py-2 border">Code</th>
                         <th class="px-4 py-2 border">Location Name</th>
@@ -21,7 +45,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($location as $location)
+                    @foreach ($locations as $location)
                         <tr>
                             <td class="px-4 py-2 border">{{ $location->id }}</td>
                             <td class="px-4 py-2 border">{{ $location->location_name }}</td>
@@ -125,6 +149,16 @@
                             onclick="toggleModal('addLocationModal')">Cancel</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center mt-6 text-md">
+            <div>
+                Showing {{ $locations->firstItem() ?? 0 }} to {{ $locations->lastItem() ?? 0 }} of {{ $locations->total() ?? 0 }}
+                entries
+            </div>
+            <div>
+                {{ $locations->appends(request()->all())->onEachSide(1)->links('vendor.pagination.tailwind-white') }}
             </div>
         </div>
     </section>

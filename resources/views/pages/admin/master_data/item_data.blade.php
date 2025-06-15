@@ -11,14 +11,37 @@
             </button>
         </div>
 
+        <form method="GET" action="{{ route('item.index') }}">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <label for="entries" class="mr-2 text-md">Show</label>
+                    <select name="entries" id="entries" onchange="this.form.submit()"
+                        class="border border-gray-300 rounded py-1 px-3 text-md bg-white text-gray-700">
+                        <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                        <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100</option>
+                    </select>
+                    <span class="ml-2 text-md">entries</span>
+                </div>
+                <div>
+                    <label for="search" class="mr-2 text-md">Search:</label>
+                    <input type="text" id="search" name="search" value="{{ request('search') }}"
+                        class="border border-gray-300 rounded py-1 px-3 text-md bg-white text-gray-700"
+                        placeholder="Search...">
+                    <button type="submit"
+                        class="ml-2 bg-gradient-to-r from-[#4ABA68] to-[#5FC4B2] hover:from-[#5FC4B2] hover:to-[#4ABA68] text-white py-1 px-3 rounded text-md">Go</button>
+                </div>
+            </div>
+        </form>
+
         <div class="overflow-x-auto">
             <table class="w-full rounded-lg border-collapse border border-gray-300 text-sm text-left">
-                <thead class="bg-gray-100 text-md md:text-xl">
+                <thead class="bg-gray-100 text-md md:text-md">
                     <tr>
                         <th class="px-4 py-2 border">ID</th>
                         <th class="px-4 py-2 border">Item Name</th>
                         <th class="px-4 py-2 border">Category</th>
-                        <th class="px-4 py-2 border">Facility</th>
                         <th class="px-4 py-2 border">Location</th>
                         <th class="px-4 py-2 border">Quantity</th>
                         <th class="px-4 py-2 border">Condition</th>
@@ -26,13 +49,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($item as $item)
+                    @foreach ($items as $item)
                         <tr>
                             <td class="px-4 py-2 border">{{ $item->id }}</td>
                             <td class="px-4 py-2 border">{{ $item->item_name }}</td>
                             <td class="px-4 py-2 border">{{ $item->category->category_name }}</td>
-                            <td class="px-4 py-2 border">{{ $item->category->facility->facility_name }}</td>
-                            <td class="px-4 py-2 border">{{ $item->category->facility->location->location_name }}</td>
+                            <td class="px-4 py-2 border">{{ $item->category->location->location_name }}</td>
                             <td class="px-4 py-2 border">{{ $item->quantity }}</td>
                             <td class="px-4 py-2 border">{{ $item->condition }}</td>
                             <td class="px-4 py-2 border">
@@ -60,45 +82,55 @@
                         <div id="editItemModal{{ $item->id }}"
                             class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50 hidden">
                             <div class="bg-white p-8 rounded shadow-lg w-1/3">
-                                <h2 class="text-2xl mb-6 font-semibold">Edit Barang</h2>
+                                <h2 class="text-2xl mb-6 font-semibold">Edit Item</h2>
                                 <form action="{{ route('item.update', $item->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-4">
-                                        <label for="item_name" class="block text-gray-700">Nama Barang</label>
+                                        <label for="item_name" class="block text-gray-700">Item Name</label>
                                         <input type="text" name="item_name" value="{{ $item->item_name }}"
                                             class="border rounded w-full px-3 py-2 mt-1">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="quantity" class="block text-gray-700">Jumlah</label>
+                                        <label for="category_id" class="block text-gray-700">Category</label>
+                                        <select name="category_id" class="border rounded w-full px-3 py-2 mt-1">
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}"
+                                                    @if ($category->id == $item->category_id) selected @endif>
+                                                    {{ $category->category_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="location_id" class="block text-gray-700">Location</label>
+                                        <select name="location_id" class="border rounded w-full px-3 py-2 mt-1">
+                                            @foreach ($locations as $location)
+                                                <option value="{{ $location->id }}"
+                                                    @if ($location->id == $item->category->location_id) selected @endif>
+                                                    {{ $location->location_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="quantity" class="block text-gray-700">Quantity</label>
                                         <input type="number" name="quantity" value="{{ $item->quantity }}"
                                             class="border rounded w-full px-3 py-2 mt-1">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="condition" class="block text-gray-700">Kondisi</label>
+                                        <label for="condition" class="block text-gray-700">Condition</label>
                                         <select name="condition" class="border rounded w-full px-3 py-2 mt-1">
                                             <option value="Normal" @if ($item->condition == 'Normal') selected @endif>Normal
                                             </option>
-                                            <option value="Tidak Normal" @if ($item->condition == 'Tidak Normal') selected @endif>
-                                                Tidak
-                                                Normal</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="category_id" class="block text-gray-700">Kategori</label>
-                                        <select name="category_id" class="border rounded w-full px-3 py-2 mt-1">
-                                            {{-- @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}"
-                                                    @if ($category->id == $item->category_id) selected @endif>
-                                                    {{ $category->category_name }}</option>
-                                            @endforeach --}}
+                                            <option value="Tidak Normal" @if ($item->condition == 'Not Normal') selected @endif>
+                                                Not Normal</option>
                                         </select>
                                     </div>
                                     <div class="flex justify-end">
                                         <button type="submit"
-                                            class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Simpan</button>
+                                            class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Save</button>
                                         <button type="button" class="bg-red-500 text-white px-4 py-2 rounded"
-                                            onclick="toggleModal('editItemModal{{ $item->id }}')">Batal</button>
+                                            onclick="toggleModal('editItemModal{{ $item->id }}')">Cancel</button>
                                     </div>
                                 </form>
                             </div>
@@ -118,14 +150,9 @@
                                     </p>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="facility_name" class="block text-gray-700">Facility Name</label>
-                                    <p class="border rounded w-full px-3 py-2 mt-1">
-                                        {{ $item->category->facility->facility_name }}</p>
-                                </div>
-                                <div class="mb-4">
                                     <label for="location_name" class="block text-gray-700">Location Name</label>
                                     <p class="border rounded w-full px-3 py-2 mt-1">
-                                        {{ $item->category->facility->location->location_name }}</p>
+                                        {{ $item->category->location->location_name }}</p>
                                 </div>
                                 <div class="mb-4">
                                     <label for="quantity" class="block text-gray-700">Quantity</label>
@@ -173,26 +200,34 @@
                 <form action="{{ route('item.store') }}" method="POST">
                     @csrf
                     <div class="mb-4">
-                        <label for="item_name" class="block text-gray-700">Nama Barang</label>
+                        <label for="item_name" class="block text-gray-700">Item Name</label>
                         <input type="text" name="item_name" class="border rounded w-full px-3 py-2 mt-1">
                     </div>
                     <div class="mb-4">
-                        <label for="quantity" class="block text-gray-700">Jumlah</label>
-                        <input type="number" name="quantity" class="border rounded w-full px-3 py-2 mt-1">
-                    </div>
-                    <div class="mb-4">
-                        <label for="condition" class="block text-gray-700">Kondisi</label>
-                        <select name="condition" class="border rounded w-full px-3 py-2 mt-1">
-                            <option value="Normal">Normal</option>
-                            <option value="Tidak Normal">Tidak Normal</option>
+                        <label for="category_id" class="block text-gray-700">Category</label>
+                        <select name="category_id" class="border rounded w-full px-3 py-2 mt-1">
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label for="category_id" class="block text-gray-700">Kategori</label>
-                        <select name="category_id" class="border rounded w-full px-3 py-2 mt-1">
-                            {{-- @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                            @endforeach --}}
+                        <label for="location_id" class="block text-gray-700">Location</label>
+                        <select name="location_id" class="border rounded w-full px-3 py-2 mt-1">
+                            @foreach ($locations as $location)
+                                <option value="{{ $location->id }}">{{ $location->location_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="quantity" class="block text-gray-700">Quantity</label>
+                        <input type="number" name="quantity" class="border rounded w-full px-3 py-2 mt-1">
+                    </div>
+                    <div class="mb-4">
+                        <label for="condition" class="block text-gray-700">Condition</label>
+                        <select name="condition" class="border rounded w-full px-3 py-2 mt-1">
+                            <option value="Normal">Normal</option>
+                            <option value="Tidak Normal">Tidak Normal</option>
                         </select>
                     </div>
                     <div class="flex justify-end">
@@ -201,6 +236,17 @@
                             onclick="toggleModal('addItemModal')">Cancel</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center mt-6 text-md">
+            <div>
+                Showing {{ $items->firstItem() ?? 0 }} to {{ $items->lastItem() ?? 0 }} of
+                {{ $items->total() ?? 0 }}
+                entries
+            </div>
+            <div>
+                {{ $items->appends(request()->all())->onEachSide(1)->links('vendor.pagination.tailwind-white') }}
             </div>
         </div>
     </section>
