@@ -8,9 +8,25 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $entries = $request->input('entries', 10);
+        $search = $request->input('search');
+
+        $query = User::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('gender', 'like', "%{$search}%")
+                    ->orWhere('phone_number', 'like', "%{$search}%")
+                    ->orWhere('role', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->paginate($entries)->appends($request->all());
+
         $title = 'User Management Data';
         return view('pages.admin.master_data.user_data', compact('users', 'title'));
     }
@@ -22,7 +38,8 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'gender' => 'required| in:male,female',
-            'phone_number' => 'required| regex:/^([0-9\s\-\+\(\)]*)$/| max:15'
+            'phone_number' => 'required| regex:/^([0-9\s\-\+\(\)]*)$/| max:15',
+            'role' => 'required|in:admin,user',
         ]);
 
         User::create([
@@ -31,6 +48,7 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
             'gender' => $validated['gender'],
             'phone_number' => $validated['phone_number'],
+            'role' => $validated['role'],
         ]);
 
         return redirect()->back()->with('Success', 'User created successfully!');
@@ -43,17 +61,19 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'password' => 'required|string|min:8',
-            'gender' => 'required| in:male,female',
-            'phone_number' => 'required| regex:/^([0-9\s\-\+\(\)]*)$/| max:15'
+            'gender' => 'required|in:male,female',
+            'phone_number' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|max:15',
+            'role' => 'required|in:admin,user',
+            'password' => 'nullable|string|min:8',
         ]);
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->gender = $validated['gender'];
         $user->phone_number = $validated['phone_number'];
+        $user->role = $validated['role'];
 
-        if ($request->filled('password')) {
+        if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
 

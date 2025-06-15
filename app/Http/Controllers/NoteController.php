@@ -87,12 +87,30 @@ class NoteController extends Controller
         return redirect()->route('note.index')->with('success', 'Note saved successfully!');
     }
 
-    public function indexNote()
+    public function indexNote(Request $request)
     {
-        $datanotes = Note::with(['user', 'location', 'category', 'item'])->get();
-        $locations = Location::all();
         $title = 'Note Management Data';
-        return view('pages.admin.master_data.note_data', compact('datanotes', 'locations', 'title'));
+        $locations = Location::all();
+        $categories = Category::all();
+
+        $entries = $request->input('entries', 10);
+        $search = $request->input('search');
+
+        $query = Note::with(['user', 'location', 'category.location', 'item']);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', fn($q) => $q->where('name', 'like', "%$search%"))
+                    ->orWhereHas('category', fn($q) => $q->where('category_name', 'like', "%$search%"))
+                    ->orWhereHas('item', fn($q) => $q->where('item_name', 'like', "%$search%"))
+                    ->orWhere('problem', 'like', "%$search%")
+                    ->orWhere('activity', 'like', "%$search%");
+            });
+        }
+
+        $datanotes = $query->paginate($entries)->appends($request->all());
+
+        return view('pages.admin.master_data.note_data', compact('datanotes', 'locations', 'categories', 'title'));
     }
 
     public function storeNote(Request $request)

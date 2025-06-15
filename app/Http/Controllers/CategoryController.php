@@ -8,12 +8,26 @@ use App\Models\Location;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $category = Category::with('location')->get();
+        $entries = $request->input('entries', 10);
+        $search = $request->input('search');
+
+        $query = Category::with('location');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('category_name', 'like', "%{$search}%")
+                    ->orWhereHas('location', function ($q2) use ($search) {
+                        $q2->where('location_name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $categories = $query->paginate($entries)->appends($request->all());
         $location = Location::all();
         $title = 'Category Management Data';
-        return view('pages.admin.master_data.category_data', compact('category', 'location', 'title'));
+        return view('pages.admin.master_data.category_data', compact('categories', 'location', 'title'));
     }
 
     public function store(Request $request)

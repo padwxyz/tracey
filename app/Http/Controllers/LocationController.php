@@ -7,11 +7,23 @@ use App\Models\Location;
 
 class LocationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $location = Location::all();
+        $entries = $request->input('entries', 10);
+        $search = $request->input('search');
+
+        $query = Location::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('location_name', 'like', "%{$search}%");
+            });
+        }
+
+        $locations = $query->paginate($entries)->appends($request->all());
+
         $title = 'Location Management Data';
-        return view('pages.admin.master_data.location_data', compact('location', 'title'));
+        return view('pages.admin.master_data.location_data', compact('locations', 'title'));
     }
 
     public function store(Request $request)
