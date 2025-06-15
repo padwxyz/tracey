@@ -10,7 +10,7 @@ class LogController extends Controller
     public function index(Request $request)
     {
         $entries = $request->input('entries', 10);
-        $search = $request->input('search');
+        $search  = $request->input('search');
 
         $query = Item::with('category.location');
 
@@ -29,6 +29,9 @@ class LogController extends Controller
         $items = $query->paginate($entries)->appends($request->all());
         $title = 'Log Status';
 
-        return view('pages.user.log', compact('items', 'title'));
+        return view('pages.user.log', compact(
+            'items',
+            'title'
+        ));
     }
 }

@@ -26,29 +26,29 @@ class UserController extends Controller
         }
 
         $users = $query->paginate($entries)->appends($request->all());
-
         $title = 'User Management Data';
+
         return view('pages.admin.master_data.user_data', compact('users', 'title'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'gender' => 'required| in:male,female',
-            'phone_number' => 'required| regex:/^([0-9\s\-\+\(\)]*)$/| max:15',
-            'role' => 'required|in:admin,user',
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|string|email|max:255|unique:users',
+            'password'      => 'required|string|min:8',
+            'gender'        => 'required|in:male,female',
+            'phone_number'  => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|max:15',
+            'role'          => 'required|in:admin,user',
         ]);
 
         User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'gender' => $validated['gender'],
-            'phone_number' => $validated['phone_number'],
-            'role' => $validated['role'],
+            'name'          => $validated['name'],
+            'email'         => $validated['email'],
+            'password'      => Hash::make($validated['password']),
+            'gender'        => $validated['gender'],
+            'phone_number'  => $validated['phone_number'],
+            'role'          => $validated['role'],
         ]);
 
         return redirect()->back()->with('Success', 'User created successfully!');
@@ -59,25 +59,24 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'gender' => 'required|in:male,female',
-            'phone_number' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|max:15',
-            'role' => 'required|in:admin,user',
-            'password' => 'nullable|string|min:8',
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|string|email|max:255|unique:users,email,' . $id,
+            'gender'        => 'required|in:male,female',
+            'phone_number'  => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|max:15',
+            'role'          => 'required|in:admin,user',
+            'password'      => 'nullable|string|min:8',
         ]);
 
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-        $user->gender = $validated['gender'];
-        $user->phone_number = $validated['phone_number'];
-        $user->role = $validated['role'];
-
-        if (!empty($validated['password'])) {
-            $user->password = Hash::make($validated['password']);
-        }
-
-        $user->save();
+        $user->update([
+            'name'          => $validated['name'],
+            'email'         => $validated['email'],
+            'gender'        => $validated['gender'],
+            'phone_number'  => $validated['phone_number'],
+            'role'          => $validated['role'],
+            'password'      => $validated['password']
+                ? Hash::make($validated['password'])
+                : $user->password,
+        ]);
 
         return redirect()->back()->with('Success', 'User updated successfully!');
     }

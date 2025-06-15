@@ -10,29 +10,32 @@ class RegisterController extends Controller
 {
     public function index()
     {
-        $title = 'Register';
-        return view('pages.auth.register', compact('title'));
+        return view('pages.auth.register', [
+            'title' => 'Register'
+        ]);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|min:3|max:255',
-            'email' => 'required|email:dns|unique:users,email',
-            'password' => 'required|min:5|max:255|confirmed',
-            'gender' => 'required|in:male,female,other',
-            'phone_number' => 'required|digits_between:9,15',
-            'terms' => 'accepted',
+            'name'          => 'required|min:3|max:255',
+            'email'         => 'required|email:dns|unique:users,email',
+            'password'      => 'required|min:5|max:255|confirmed',
+            'gender'        => 'required|in:male,female,other',
+            'phone_number'  => 'required|digits_between:9,15',
+            'terms'         => 'accepted',
         ], [
-            'terms.accepted' => 'You must agree to the terms and conditions',
+            'terms.accepted' => 'You must agree to the terms and conditions.',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-        $validated['role'] = 'user';
-
-        unset($validated['terms']);
-
-        User::create($validated);
+        User::create([
+            'name'         => $validated['name'],
+            'email'        => $validated['email'],
+            'password'     => Hash::make($validated['password']),
+            'gender'       => $validated['gender'],
+            'phone_number' => $validated['phone_number'],
+            'role'         => 'user',
+        ]);
 
         return redirect()->route('login')->with('success', 'Registration successful! Please login!');
     }

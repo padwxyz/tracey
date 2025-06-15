@@ -11,7 +11,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $entries = $request->input('entries', 10);
-        $search = $request->input('search');
+        $search  = $request->input('search');
 
         $query = Category::with('location');
 
@@ -25,27 +25,31 @@ class CategoryController extends Controller
         }
 
         $categories = $query->paginate($entries)->appends($request->all());
-        $location = Location::all();
-        $title = 'Category Management Data';
+        $location   = Location::all();
+        $title      = 'Category Management Data';
+
         return view('pages.admin.master_data.category_data', compact('categories', 'location', 'title'));
     }
 
     public function store(Request $request)
     {
         Category::create($request->all());
+
         return redirect()->back()->with('Success', 'Category created successfully!');
     }
 
     public function update(Request $request, $id)
     {
-        $Category = Category::findOrFail($id);
-        $Category->update($request->all());
+        $category = Category::findOrFail($id);
+        $category->update($request->all());
+
         return redirect()->back()->with('Success', 'Category updated successfully!');
     }
 
     public function delete($id)
     {
         Category::findOrFail($id)->delete();
+
         return redirect()->back()->with('Success', 'Category deleted successfully!');
     }
 }

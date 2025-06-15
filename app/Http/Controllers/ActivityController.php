@@ -12,8 +12,9 @@ class ActivityController extends Controller
 {
     public function index()
     {
-        $notes = $notes = Note::paginate(6);
+        $notes = Note::paginate(6);
         $title = 'All Activity';
+
         return view('pages.user.activity.activity', compact('notes', 'title'));
     }
 
@@ -22,6 +23,7 @@ class ActivityController extends Controller
         $categories = Category::all();
         $notes = null;
         $title = 'View Activity by Category';
+
         return view('pages.user.activity.activity_bycategory', compact('categories', 'notes', 'title'));
     }
 
@@ -30,6 +32,7 @@ class ActivityController extends Controller
         $items = Item::all();
         $notes = null;
         $title = 'View Activity by Item';
+
         return view('pages.user.activity.activity_byitem', compact('items', 'notes', 'title'));
     }
 
@@ -38,17 +41,18 @@ class ActivityController extends Controller
         $locations = Location::all();
         $notes = null;
         $title = 'View Activity by Location';
+
         return view('pages.user.activity.activity_bylocation', compact('locations', 'notes', 'title'));
     }
 
     public function filterActivity(Request $request)
     {
         $request->validate([
-            'filter_type' => 'required|string|in:category,item,location',
+            'filter_type'  => 'required|string|in:category,item,location',
             'filter_value' => 'required|integer',
         ]);
 
-        $filterType = $request->input('filter_type');
+        $filterType  = $request->input('filter_type');
         $filterValue = $request->input('filter_value');
 
         $notes = Note::with(['category', 'item', 'location'])
@@ -67,28 +71,43 @@ class ActivityController extends Controller
         $title = 'Filtered Activities';
 
         $viewMap = [
-            'category' => ['view' => 'pages.user.activity.activity_bycategory', 'data' => ['categories' => Category::all()]],
-            'item' => ['view' => 'pages.user.activity.activity_byitem', 'data' => ['items' => Item::all()]],
-            'location' => ['view' => 'pages.user.activity.activity_bylocation', 'data' => ['locations' => Location::all()]],
+            'category' => [
+                'view' => 'pages.user.activity.activity_bycategory',
+                'data' => ['categories' => Category::all()],
+            ],
+            'item' => [
+                'view' => 'pages.user.activity.activity_byitem',
+                'data' => ['items' => Item::all()],
+            ],
+            'location' => [
+                'view' => 'pages.user.activity.activity_bylocation',
+                'data' => ['locations' => Location::all()],
+            ],
         ];
 
-        $viewData = $viewMap[$filterType];
-        $view = $viewData['view'];
-        $additionalData = $viewData['data'];
+        $view = $viewMap[$filterType]['view'];
+        $additionalData = $viewMap[$filterType]['data'];
 
         return view($view, array_merge(compact('notes', 'title'), $additionalData));
     }
 
-
     public function viewByStatus()
     {
-        $todos = Note::where('status', 'todo')->get();
-        $pendings = Note::where('status', 'pending')->get();
+        $todos      = Note::where('status', 'todo')->get();
+        $pendings   = Note::where('status', 'pending')->get();
         $inProgress = Note::where('status', 'inprogress')->get();
-        $dones = Note::where('status', 'done')->get();
-        $cancels = Note::where('status', 'cancel')->get();
+        $dones      = Note::where('status', 'done')->get();
+        $cancels    = Note::where('status', 'cancel')->get();
 
         $title = 'View Activity by Status';
-        return view('pages.user.activity.activity_bystatus', compact('todos', 'pendings', 'inProgress', 'dones', 'cancels', 'title'));
+
+        return view('pages.user.activity.activity_bystatus', compact(
+            'todos',
+            'pendings',
+            'inProgress',
+            'dones',
+            'cancels',
+            'title'
+        ));
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Note;
 use App\Models\Location;
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\User;
 
 class NoteController extends Controller
 {
@@ -15,6 +16,7 @@ class NoteController extends Controller
         $categories = Category::where('location_id', $locationId)
             ->select('id', 'category_name')
             ->get();
+
         return response()->json($categories);
     }
 
@@ -23,14 +25,14 @@ class NoteController extends Controller
         $items = Item::where('category_id', $categoryId)
             ->select('id', 'item_name')
             ->get();
+
         return response()->json($items);
     }
 
     public function index(Request $request)
     {
         $title = 'New Note';
-        $user = \App\Models\User::first();
-
+        $user = User::first(); // Disarankan nanti pakai Auth::user()
         $locations = Location::all();
         $categories = collect();
         $items = collect();
@@ -59,30 +61,37 @@ class NoteController extends Controller
 
     public function store(Request $request)
     {
-        $user = \App\Models\User::first();
+        $user = User::first();
 
-        $validatedData = $request->validate([
-            'location' => 'required|exists:locations,id',
-            'category' => 'nullable|exists:categories,id',
-            'item' => 'nullable|exists:items,id',
-            'date' => 'required|date',
-            'time' => 'required|date_format:H:i',
-            'problem' => 'required|string|max:255',
-            'activity' => 'required|string|max:255',
-            'status' => 'required|in:todo,pending,inprogress,done,cancel',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        $validated = $request->validate([
+            'location'   => 'required|exists:locations,id',
+            'category'   => 'nullable|exists:categories,id',
+            'item'       => 'nullable|exists:items,id',
+            'date'       => 'required|date',
+            'time'       => 'required|date_format:H:i',
+            'problem'    => 'required|string|max:255',
+            'activity'   => 'required|string|max:255',
+            'status'     => 'required|in:todo,pending,inprogress,done,cancel',
+            'image'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $imagePath = $request->hasFile('image') ? $request->file('image')->store('notes_images', 'public') : null;
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('notes_images', 'public')
+            : null;
 
-        Note::create(array_merge($validatedData, [
-            'name' => $user->name,
-            'user_id' => $user->id,
+        Note::create([
+            'user_id'     => $user->id,
+            'name'        => $user->name,
             'location_id' => $request->location,
             'category_id' => $request->category,
-            'item_id' => $request->item,
-            'image' => $imagePath
-        ]));
+            'item_id'     => $request->item,
+            'date'        => $validated['date'],
+            'time'        => $validated['time'],
+            'problem'     => $validated['problem'],
+            'activity'    => $validated['activity'],
+            'status'      => $validated['status'],
+            'image'       => $imagePath,
+        ]);
 
         return redirect()->route('note.index')->with('success', 'Note saved successfully!');
     }
@@ -102,9 +111,13 @@ class NoteController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->whereHas('user', fn($q) => $q->where('name', 'like', "%$search%"))
                     ->orWhereHas('category', fn($q) => $q->where('category_name', 'like', "%$search%"))
+                    ->orWhereHas('location', fn($q) => $q->where('location_name', 'like', "%$search%"))
                     ->orWhereHas('item', fn($q) => $q->where('item_name', 'like', "%$search%"))
+                    ->orWhere('date', 'like', "%$search%")
+                    ->orWhere('time', 'like', "%$search%")
                     ->orWhere('problem', 'like', "%$search%")
-                    ->orWhere('activity', 'like', "%$search%");
+                    ->orWhere('activity', 'like', "%$search%")
+                    ->orWhere('status', 'like', "%$search%");
             });
         }
 
@@ -116,6 +129,7 @@ class NoteController extends Controller
     public function storeNote(Request $request)
     {
         Note::create($request->all());
+
         return redirect()->back()->with('success', 'Note created successfully.');
     }
 
@@ -123,12 +137,14 @@ class NoteController extends Controller
     {
         $note = Note::findOrFail($id);
         $note->update($request->all());
+
         return redirect()->back()->with('success', 'Note updated successfully.');
     }
 
     public function deleteNote($id)
     {
         Note::findOrFail($id)->delete();
+
         return redirect()->back()->with('success', 'Note deleted successfully.');
     }
 
@@ -136,6 +152,7 @@ class NoteController extends Controller
     {
         $title = 'All Activity';
         $notes = Note::all();
+
         return view('pages.user.activity.activity', compact('title', 'notes'));
     }
 
@@ -143,20 +160,26 @@ class NoteController extends Controller
     {
         $title = 'Activity Details';
         $note = Note::findOrFail($id);
+
         return view('pages.user.activity.activity_details', compact('note', 'title'));
     }
 
     public function updateActivity(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'status' => 'required|in:todo,pending,inprogress,done,cancel',
-            'date' => 'required|date',
-            'time' => 'required|date_format:H:i',
+        $validated = $request->validate([
+            'status'  => 'required|in:todo,pending,inprogress,done,cancel',
+            'date'    => 'required|date',
+            'time'    => 'required|date_format:H:i',
             'message' => 'required|string',
         ]);
 
         $note = Note::findOrFail($id);
-        $note->update(array_merge($validatedData, ['activity' => $validatedData['message']]));
+        $note->update([
+            'status'   => $validated['status'],
+            'date'     => $validated['date'],
+            'time'     => $validated['time'],
+            'activity' => $validated['message'],
+        ]);
 
         return redirect()->route('activity-details', $id)->with('success', 'Activity updated successfully!');
     }

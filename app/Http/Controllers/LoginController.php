@@ -9,13 +9,15 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view('pages.auth.login', ['title' => 'Login']);
+        return view('pages.auth.login', [
+            'title' => 'Login'
+        ]);
     }
 
     public function authenticate(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
@@ -31,19 +33,20 @@ class LoginController extends Controller
                     return redirect()->route('dashboard-user');
                 default:
                     Auth::logout();
-                    return redirect()->route('login')->with('failed', 'Role tidak dikenali!');
+                    return redirect()->route('login')->with('failed', 'Unrecognized role!');
             }
         }
 
-        return back()->with('failed', 'Login gagal! Cek email atau password.');
+        return back()->with('failed', 'Login failed! Please check your email or password!');
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('landing-page')->with('success', 'Logout berhasil.');
+        return redirect()->route('landing-page')->with('success', 'Successfully logged out!');
     }
 }

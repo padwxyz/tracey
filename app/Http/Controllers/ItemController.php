@@ -12,7 +12,7 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         $entries = $request->input('entries', 10);
-        $search = $request->input('search');
+        $search  = $request->input('search');
 
         $query = Item::with('category.location');
 
@@ -28,18 +28,23 @@ class ItemController extends Controller
             });
         }
 
-        $items = $query->paginate($entries)->appends($request->all());
+        $items      = $query->paginate($entries)->appends($request->all());
         $categories = Category::with('location')->get();
-        $locations = Location::all();
-        $title = 'Item Management Data';
+        $locations  = Location::all();
+        $title      = 'Item Management Data';
 
-        return view('pages.admin.master_data.item_data', compact('items', 'categories', 'locations', 'title'));
+        return view('pages.admin.master_data.item_data', compact(
+            'items',
+            'categories',
+            'locations',
+            'title'
+        ));
     }
-
 
     public function store(Request $request)
     {
         Item::create($request->all());
+
         return redirect()->back()->with('Success', 'Item created successfully!');
     }
 
@@ -47,12 +52,14 @@ class ItemController extends Controller
     {
         $item = Item::findOrFail($id);
         $item->update($request->all());
+
         return redirect()->back()->with('Success', 'Item updated successfully!');
     }
 
     public function delete($id)
     {
         Item::findOrFail($id)->delete();
+
         return redirect()->back()->with('Success', 'Item deleted successfully!');
     }
 }
