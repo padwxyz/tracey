@@ -35,8 +35,6 @@
                     </svg>
                 </button>
                 <div x-show="open" x-collapse class="ml-6 mt-2 space-y-2 text-sm text-[#005051]">
-                    <a href="{{ route('admin.index') }}"
-                        class="block px-3 py-2 hover:bg-[#005051] hover:text-white rounded">Admin Data</a>
                     <a href="{{ route('user.index') }}"
                         class="block px-3 py-2 hover:bg-[#005051] hover:text-white rounded">User Data</a>
                     <a href="{{ route('note_data.index') }}"
