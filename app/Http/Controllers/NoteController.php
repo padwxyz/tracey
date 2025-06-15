@@ -32,7 +32,7 @@ class NoteController extends Controller
     public function index(Request $request)
     {
         $title = 'New Note';
-        $user = User::first(); // Disarankan nanti pakai Auth::user()
+        $user = User::first();
         $locations = Location::all();
         $categories = collect();
         $items = collect();
